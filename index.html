@@ -3,293 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animação ITA - Lente e Bloco Refrator</title>
+    <title>Entendendo a Questão do ITA - Lente e Bloco</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f9;
-            margin: 20px;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 20px;
-            max-width: 850px;
+        .main-container {
+            max-width: 900px;
             width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
         }
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #1a237e;
+        }
+        .step {
+            margin-bottom: 30px;
+            border-left: 4px solid #3f51b5;
+            padding-left: 15px;
+        }
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #283593;
             margin-bottom: 10px;
         }
-        p {
-            text-align: center;
-            color: #555;
-            margin-bottom: 15px;
+        .canvas-box {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
         }
         canvas {
-            display: block;
-            width: 100%;
-            height: auto;
             border: 1px solid #ccc;
             border-radius: 12px;
             background: #fafafa;
+            max-width: 100%;
+            height: auto;
+        }
+        .formula {
+            font-size: 1.1rem;
+            background: #e8eaf6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .interactive {
+            border-top: 2px dashed #3f51b5;
+            padding-top: 20px;
+            margin-top: 30px;
         }
         .controls {
-            margin-top: 15px;
             text-align: center;
+            margin: 15px 0;
         }
         input[type=range] {
             width: 70%;
             vertical-align: middle;
         }
-        .info {
+        .result {
             text-align: center;
-            font-size: 1.1rem;
-            margin-top: 10px;
-            color: #1a237e;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
         .legend {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
-        .legend-item {
+        .legend span {
             display: flex;
             align-items: center;
             gap: 5px;
             font-size: 0.9rem;
         }
         .color-box {
-            width: 18px;
-            height: 18px;
-            border-radius: 4px;
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        @media (max-width: 600px) {
+            .main-container { padding: 15px; }
+            .step-title { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Animação da Questão do ITA</h1>
-    <p>Dois raios paralelos são focados no interior de um bloco transparente.</p>
+<div class="main-container">
+    <h1>🔍 Entendendo a Questão do ITA</h1>
+    <p style="text-align:center;">Dois raios paralelos são focados em um ponto P dentro de um bloco transparente.</p>
 
-    <canvas id="canvas" width="800" height="500"></canvas>
-
-    <div class="controls">
-        <label for="L">Distância L entre a lente e a superfície do bloco (mm):</label><br>
-        <input type="range" id="L" min="0.0" max="1.0" step="0.001" value="0.4226">
-        <span id="Lvalue">0.423</span> mm
+    <!-- ETAPA 1 -->
+    <div class="step">
+        <div class="step-title">Etapa 1: A trajetória no ar e o triângulo retângulo</div>
+        <p>Os raios saem da lente convergente e vão se encontrar no foco F'. Antes disso, porém, a superfície do bloco intercepta os raios. Vamos analisar apenas o raio superior.</p>
+        <p>A altura inicial do raio na lente é <b>y₀ = 1 mm</b> e a distância focal é <b>f = 1 mm</b>. Isso forma um triângulo retângulo com catetos y₀ e f. O ângulo θ entre o raio e o eixo óptico é dado por:</p>
+        <div class="formula">tan θ = y₀ / f = 1 / 1 = 1  →  θ = 45°</div>
+        <p>Se a superfície do bloco está a uma distância <b>L</b> da lente, a altura y<sub>s</sub> do raio nessa superfície diminui linearmente. Pela semelhança de triângulos:</p>
+        <div class="formula">y<sub>s</sub> = y₀ × (1 − L/f) = 1 − L</div>
+        <div class="canvas-box">
+            <canvas id="canvas1" width="500" height="260"></canvas>
+        </div>
+        <p><i>No desenho acima, o triângulo maior tem catetos y₀ e f, e o triângulo menor tem catetos (y₀ − y<sub>s</sub>) e L. A semelhança entre eles leva à fórmula de y<sub>s</sub>.</i></p>
     </div>
 
-    <div class="info" id="status">
-        Os raios se encontram em P? <span id="result">✅</span>
+    <!-- ETAPA 2 -->
+    <div class="step">
+        <div class="step-title">Etapa 2: Refração na superfície do bloco</div>
+        <p>Ao entrar no bloco (índice de refração n = √2), o raio muda de direção. Aplicamos a Lei de Snell:</p>
+        <div class="formula">n<sub>ar</sub> · sen θ = n<sub>bloco</sub> · sen θ'</div>
+        <p>Substituindo: 1 · sen 45° = √2 · sen θ'  →  sen θ' = 1/2  →  θ' = 30°.</p>
+        <p>Portanto, dentro do bloco, o raio forma um ângulo de 30° com o eixo.</p>
+        <div class="canvas-box">
+            <canvas id="canvas2" width="500" height="280"></canvas>
+        </div>
     </div>
 
-    <div class="legend">
-        <span class="legend-item"><span class="color-box" style="background:#e53935;"></span> Raio no ar</span>
-        <span class="legend-item"><span class="color-box" style="background:#1e88e5;"></span> Raio no bloco</span>
-        <span class="legend-item"><span class="color-box" style="background:#43a047;"></span> Eixo óptico</span>
-        <span class="legend-item"><span class="color-box" style="background:#ffb300;"></span> Superfície do bloco</span>
-        <span class="legend-item"><span class="color-box" style="background:#8e24aa;"></span> Ponto P</span>
+    <!-- ETAPA 3 -->
+    <div class="step">
+        <div class="step-title">Etapa 3: A trajetória dentro do bloco e o novo triângulo</div>
+        <p>O raio refratado deve atingir o ponto P, que está a 1 mm de profundidade (sobre o eixo). Formamos outro triângulo retângulo: cateto vertical y<sub>s</sub> e cateto horizontal 1 mm, com ângulo de 30°.</p>
+        <div class="formula">tan 30° = y<sub>s</sub> / 1  →  y<sub>s</sub> = 1/√3</div>
+        <div class="canvas-box">
+            <canvas id="canvas3" width="500" height="260"></canvas>
+        </div>
+    </div>
+
+    <!-- ETAPA 4 -->
+    <div class="step">
+        <div class="step-title">Etapa 4: Igualando as expressões de y<sub>s</sub></div>
+        <p>Temos duas expressões para a altura y<sub>s</sub> na superfície do bloco:</p>
+        <ul>
+            <li>Do triângulo no ar: y<sub>s</sub> = 1 − L</li>
+            <li>Do triângulo no bloco: y<sub>s</sub> = 1/√3</li>
+        </ul>
+        <p>Igualando:</p>
+        <div class="formula">1 − L = 1/√3  →  L = 1 − 1/√3 = 1 − √3/3 mm</div>
+        <p><b>Essa é a distância desejada entre a lente e o bloco.</b></p>
+    </div>
+
+    <!-- INTERAÇÃO -->
+    <div class="interactive">
+        <h2>🎮 Experimente ajustar L</h2>
+        <p>Arraste o slider para alterar a distância L. Observe como o ponto de encontro dos raios se desloca. Quando L = 1 − √3/3 ≈ 0,423 mm, os raios se encontram exatamente no ponto P.</p>
+        <div class="controls">
+            <label for="L">L = <span id="Ldisplay">0.423</span> mm</label><br>
+            <input type="range" id="L" min="0.0" max="1.0" step="0.001" value="0.423">
+        </div>
+        <div class="result" id="resultText">Os raios atingem o ponto P? ✅</div>
+        <div class="canvas-box">
+            <canvas id="canvasInteractive" width="700" height="400"></canvas>
+        </div>
+        <div class="legend">
+            <span><span class="color-box" style="background:#e53935;"></span> Raio no ar</span>
+            <span><span class="color-box" style="background:#1e88e5;"></span> Raio no bloco</span>
+            <span><span class="color-box" style="background:#43a047;"></span> Eixo óptico</span>
+            <span><span class="color-box" style="background:#ffb300;"></span> Superfície</span>
+            <span><span class="color-box" style="background:#8e24aa;"></span> Ponto P</span>
+        </div>
     </div>
 </div>
 
 <script>
-    (function() {
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
+    // ========== FUNÇÕES AUXILIARES PARA DESENHAR ==========
+    function desenharCenario1(canvasId, Lmm = 0.423) {
+        const c = document.getElementById(canvasId);
+        const ctx = c.getContext('2d');
+        const w = c.width, h = c.height;
+        ctx.clearRect(0,0,w,h);
+        const eixoY = h/2;
+        const lenteX = 150;
+        const fPx = 100;      // 1 mm = 100 px
+        const y0Px = 100;
+        const LPx = Lmm * fPx;
 
-        // Escala: 1 mm = 120 pixels
-        const scale = 120;
+        // eixo
+        ctx.setLineDash([5,5]);
+        ctx.strokeStyle = '#43a047';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0,eixoY); ctx.lineTo(w,eixoY); ctx.stroke();
+        ctx.setLineDash([]);
+        // lente
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-120); ctx.lineTo(lenteX,eixoY+120); ctx.stroke();
+        // foco
+        ctx.fillStyle = '#333'; ctx.beginPath(); ctx.arc(lenteX+fPx,eixoY,4,0,2*Math.PI); ctx.fill();
+        ctx.fillText("F'", lenteX+fPx-5, eixoY-8);
+        // superfície
+        const blocoX = lenteX + LPx;
+        ctx.strokeStyle = '#ffb300'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(blocoX,eixoY-150); ctx.lineTo(blocoX,eixoY+150); ctx.stroke();
 
-        // Coordenadas centrais
-        const eixoY = height / 2;         // eixo óptico horizontal
-        const lenteX = 250;               // posição da lente delgada
+        // raio no ar (superior)
+        ctx.strokeStyle = '#e53935'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-y0Px); ctx.lineTo(blocoX,eixoY-(y0Px*(1-LPx/fPx))); ctx.stroke();
 
-        // Distância focal f = 1 mm => 120 pixels
-        const f = 1 * scale;              // 120 px
+        // triângulo maior (catetos y0 e f)
+        ctx.setLineDash([3,3]); ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-y0Px); ctx.lineTo(lenteX,eixoY); ctx.lineTo(lenteX+fPx,eixoY); ctx.closePath(); ctx.stroke();
+        // triângulo menor (catetos y0-ys e L)
+        const ysPx = y0Px*(1-LPx/fPx);
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-y0Px); ctx.lineTo(lenteX,eixoY-ysPx); ctx.lineTo(blocoX,eixoY-ysPx); ctx.closePath(); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#333';
+        ctx.fillText("y0", lenteX-25, eixoY-y0Px/2);
+        ctx.fillText("f", lenteX+fPx/2-10, eixoY+15);
+        ctx.fillText("L", lenteX+LPx/2-10, eixoY-ysPx+15);
+        ctx.fillText("ys", blocoX+5, eixoY-ysPx/2);
+    }
 
-        // Altura dos raios na lente: y0 = 1 mm => 120 px
-        const y0 = 1 * scale;             // 120 px
+    function desenharCenario2(canvasId) {
+        const c = document.getElementById(canvasId);
+        const ctx = c.getContext('2d');
+        const w = c.width, h = c.height;
+        ctx.clearRect(0,0,w,h);
+        const eixoY = h/2;
+        const superficieX = 250;
+        ctx.setLineDash([5,5]);
+        ctx.strokeStyle = '#43a047'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0,eixoY); ctx.lineTo(w,eixoY); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = '#ffb300'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY-120); ctx.lineTo(superficieX,eixoY+120); ctx.stroke();
 
-        // Profundidade do ponto P dentro do bloco = 1 mm => 120 px
-        const profundidade = 1 * scale;   // 120 px
+        // raio incidente (45°)
+        ctx.strokeStyle = '#e53935'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(superficieX-100,eixoY-100); ctx.lineTo(superficieX,eixoY-20); ctx.stroke();
+        // normal
+        ctx.strokeStyle = '#555'; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY-130); ctx.lineTo(superficieX,eixoY+130); ctx.stroke();
+        ctx.setLineDash([]);
+        // raio refratado (30°)
+        ctx.strokeStyle = '#1e88e5'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY-20); ctx.lineTo(superficieX+80,eixoY); ctx.stroke();
 
-        // Slider para L (em mm)
-        const slider = document.getElementById('L');
-        const LvalueSpan = document.getElementById('Lvalue');
-        const resultSpan = document.getElementById('result');
+        ctx.fillStyle = '#333';
+        ctx.fillText("θ = 45°", superficieX-70, eixoY-60);
+        ctx.fillText("θ' = 30°", superficieX+30, eixoY-30);
+        ctx.fillText("Ar (n=1)", superficieX-120, eixoY-120);
+        ctx.fillText("Bloco (n=√2)", superficieX+120, eixoY-80);
+    }
 
-        function desenhar() {
-            ctx.clearRect(0, 0, width, height);
+    function desenharCenario3(canvasId) {
+        const c = document.getElementById(canvasId);
+        const ctx = c.getContext('2d');
+        const w = c.width, h = c.height;
+        ctx.clearRect(0,0,w,h);
+        const eixoY = h/2;
+        const superficieX = 150;
+        ctx.setLineDash([5,5]);
+        ctx.strokeStyle = '#43a047'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0,eixoY); ctx.lineTo(w,eixoY); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = '#ffb300'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY-120); ctx.lineTo(superficieX,eixoY+120); ctx.stroke();
 
-            // Eixo óptico
-            ctx.strokeStyle = '#43a047';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 4]);
-            ctx.beginPath();
-            ctx.moveTo(0, eixoY);
-            ctx.lineTo(width, eixoY);
-            ctx.stroke();
-            ctx.setLineDash([]);
+        // triângulo dentro do bloco: catetos ys e 1 mm
+        const ysPx = 60; // representação
+        const profPx = 104; // 1 mm ≈ 104 px para tan 30
+        ctx.strokeStyle = '#1e88e5'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY-ysPx); ctx.lineTo(superficieX+profPx,eixoY); ctx.stroke();
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+        ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(superficieX,eixoY); ctx.lineTo(superficieX+profPx,eixoY); ctx.lineTo(superficieX+profPx,eixoY-ysPx); ctx.closePath(); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#333';
+        ctx.fillText("ys", superficieX-25, eixoY-ysPx/2);
+        ctx.fillText("1 mm", superficieX+profPx/2-15, eixoY+15);
+        ctx.fillText("30°", superficieX+15, eixoY-15);
+    }
 
-            // Lente delgada (linha vertical)
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(lenteX, eixoY - 150);
-            ctx.lineTo(lenteX, eixoY + 150);
-            ctx.stroke();
-            ctx.fillStyle = '#333';
-            ctx.font = '16px Arial';
-            ctx.fillText('Lente', lenteX - 30, eixoY - 130);
+    function desenharInterativo(Lmm) {
+        const c = document.getElementById('canvasInteractive');
+        const ctx = c.getContext('2d');
+        const w = c.width, h = c.height;
+        ctx.clearRect(0,0,w,h);
+        const eixoY = h/2;
+        const lenteX = 250;
+        const scale = 150; // 1 mm = 150 px
+        const fPx = 1 * scale;
+        const y0Px = 1 * scale;
+        const profPx = 1 * scale;
+        const LPx = Lmm * scale;
+        const blocoX = lenteX + LPx;
 
-            // Foco F'
-            ctx.fillStyle = '#333';
-            ctx.beginPath();
-            ctx.arc(lenteX + f, eixoY, 5, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.fillText("F'", lenteX + f - 5, eixoY - 8);
+        // eixo
+        ctx.setLineDash([5,5]);
+        ctx.strokeStyle = '#43a047'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(0,eixoY); ctx.lineTo(w,eixoY); ctx.stroke();
+        ctx.setLineDash([]);
+        // lente
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-180); ctx.lineTo(lenteX,eixoY+180); ctx.stroke();
+        ctx.fillText("Lente", lenteX-30, eixoY-160);
+        // foco
+        ctx.fillStyle = '#333'; ctx.beginPath(); ctx.arc(lenteX+fPx,eixoY,5,0,2*Math.PI); ctx.fill();
+        ctx.fillText("F'", lenteX+fPx-5, eixoY-8);
+        // superfície
+        ctx.strokeStyle = '#ffb300'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(blocoX,eixoY-200); ctx.lineTo(blocoX,eixoY+200); ctx.stroke();
+        ctx.fillText("Superfície", blocoX-30, eixoY-170);
 
-            // Leitura de L (em mm) e conversão para pixels
-            const Lmm = parseFloat(slider.value);
-            const L = Lmm * scale;  // distância em pixels da lente até a superfície do bloco
-            LvalueSpan.textContent = Lmm.toFixed(3);
+        // raios no ar
+        const ysPx = y0Px * (1 - LPx/fPx);
+        ctx.strokeStyle = '#e53935'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY-y0Px); ctx.lineTo(blocoX,eixoY-ysPx); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(lenteX,eixoY+y0Px); ctx.lineTo(blocoX,eixoY+ysPx); ctx.stroke();
 
-            // Posição da superfície do bloco
-            const blocoX = lenteX + L;
+        // refração
+        const theta = Math.atan2(y0Px - ysPx, LPx);
+        const thetaPrime = Math.asin(Math.sin(theta)/Math.sqrt(2));
+        const deltaX = ysPx / Math.tan(thetaPrime);
+        ctx.strokeStyle = '#1e88e5'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(blocoX,eixoY-ysPx); ctx.lineTo(blocoX+deltaX,eixoY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(blocoX,eixoY+ysPx); ctx.lineTo(blocoX+deltaX,eixoY); ctx.stroke();
 
-            // Superfície do bloco (linha vertical)
-            ctx.strokeStyle = '#ffb300';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(blocoX, eixoY - 200);
-            ctx.lineTo(blocoX, eixoY + 200);
-            ctx.stroke();
-            ctx.fillStyle = '#ffb300';
-            ctx.fillText('Superfície', blocoX - 30, eixoY - 160);
+        // ponto P
+        const Px = blocoX + profPx;
+        ctx.fillStyle = '#8e24aa';
+        ctx.beginPath(); ctx.arc(Px,eixoY,6,0,2*Math.PI); ctx.fill();
+        ctx.fillText("P", Px+8, eixoY-8);
 
-            // Cálculo da altura do raio superior na superfície (em pixels)
-            // y_s = y0 * (1 - L/f)   (altura acima do eixo)
-            const y_s = y0 * (1 - L / f);  // pixels
+        // verificação
+        const result = document.getElementById('resultText');
+        const aceito = Math.abs(deltaX - profPx) < 3;
+        result.textContent = aceito ? "Os raios atingem o ponto P? ✅" : "Os raios atingem o ponto P? ❌ (deslocado)";
+    }
 
-            // Garantir que y_s seja positivo (L < f)
-            if (y_s <= 0) {
-                // Se a superfície estiver além do foco, o raio já teria cruzado o eixo; não desenhar bloco
-                ctx.fillStyle = '#555';
-                ctx.font = '18px Arial';
-                ctx.fillText('A superfície deve estar antes do foco.', 300, 80);
-                return;
-            }
+    // Desenhar os canvases das etapas
+    desenharCenario1('canvas1', 0.423);
+    desenharCenario2('canvas2');
+    desenharCenario3('canvas3');
 
-            // Raios no ar (da lente até a superfície)
-            // Raio superior (y0 acima do eixo) -> incide na superfície em y_s acima do eixo
-            ctx.strokeStyle = '#e53935';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(lenteX, eixoY - y0);
-            ctx.lineTo(blocoX, eixoY - y_s);
-            ctx.stroke();
-
-            // Raio inferior (y0 abaixo do eixo) -> incide na superfície em y_s abaixo do eixo
-            ctx.strokeStyle = '#e53935';
-            ctx.beginPath();
-            ctx.moveTo(lenteX, eixoY + y0);
-            ctx.lineTo(blocoX, eixoY + y_s);
-            ctx.stroke();
-
-            // Ângulo de incidência θ (com a horizontal)
-            const theta = Math.atan2(y0 - y_s, L);  // radianos
-            const thetaDeg = theta * 180 / Math.PI;
-
-            // Lei de Snell: n_ar * sin θ = n_bloco * sin θ'
-            const n_ar = 1;
-            const n_bloco = Math.sqrt(2);
-            const sinTheta = Math.sin(theta);
-            const sinThetaPrime = (n_ar / n_bloco) * sinTheta;
-            const thetaPrime = Math.asin(sinThetaPrime);
-            const thetaPrimeDeg = thetaPrime * 180 / Math.PI;
-
-            // Desenhar raios no bloco (após refração)
-            // Para o raio superior: ele desce em direção ao eixo com ângulo θ'
-            // A distância horizontal que ele percorre para atingir o eixo é: Δx = y_s / tan θ'
-            const deltaX = y_s / Math.tan(thetaPrime);  // pixels
-
-            // Raio superior dentro do bloco
-            ctx.strokeStyle = '#1e88e5';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(blocoX, eixoY - y_s);
-            ctx.lineTo(blocoX + deltaX, eixoY);
-            ctx.stroke();
-
-            // Raio inferior dentro do bloco (simétrico, sobe)
-            ctx.strokeStyle = '#1e88e5';
-            ctx.beginPath();
-            ctx.moveTo(blocoX, eixoY + y_s);
-            ctx.lineTo(blocoX + deltaX, eixoY);
-            ctx.stroke();
-
-            // Ponto P fixo: a 1 mm (profundidade) dentro do bloco, sobre o eixo
-            const Px = blocoX + profundidade;
-            const Py = eixoY;
-
-            // Desenhar P
-            ctx.fillStyle = '#8e24aa';
-            ctx.beginPath();
-            ctx.arc(Px, Py, 6, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.fillStyle = '#8e24aa';
-            ctx.font = '16px Arial';
-            ctx.fillText('P', Px + 8, Py - 8);
-
-            // Verificar se os raios atingem P (ou seja, se deltaX ≈ profundidade)
-            const tol = 2;  // pixels de tolerância
-            const acertou = Math.abs(deltaX - profundidade) < tol;
-            resultSpan.textContent = acertou ? '✅ Sim!' : '❌ Não (deslocado)';
-
-            // Desenhar ângulos e informações
-            ctx.fillStyle = '#333';
-            ctx.font = '14px Arial';
-            // θ no ar
-            ctx.fillText('θ = ' + thetaDeg.toFixed(1) + '°', lenteX + 20, eixoY - y0 + 15);
-            // θ' no bloco
-            if (deltaX > 0) {
-                ctx.fillText("θ' = " + thetaPrimeDeg.toFixed(1) + '°', blocoX + 20, eixoY - y_s + 15);
-            }
-
-            // Linhas tracejadas para indicar triângulos
-            ctx.setLineDash([3, 3]);
-            ctx.strokeStyle = '#999';
-            ctx.lineWidth = 1;
-            // triângulo no ar: cateto vertical (y0 - y_s) e horizontal L
-            ctx.beginPath();
-            ctx.moveTo(lenteX, eixoY - y0);
-            ctx.lineTo(lenteX, eixoY - y_s);
-            ctx.lineTo(blocoX, eixoY - y_s);
-            ctx.closePath();
-            ctx.stroke();
-            // triângulo no bloco: cateto vertical y_s e horizontal deltaX
-            ctx.beginPath();
-            ctx.moveTo(blocoX, eixoY - y_s);
-            ctx.lineTo(blocoX, eixoY);
-            ctx.lineTo(blocoX + deltaX, eixoY);
-            ctx.closePath();
-            ctx.stroke();
-            ctx.setLineDash([]);
-        }
-
-        slider.addEventListener('input', desenhar);
-        desenhar();
-    })();
+    // Slider interativo
+    const slider = document.getElementById('L');
+    const Ldisplay = document.getElementById('Ldisplay');
+    slider.addEventListener('input', () => {
+        const val = parseFloat(slider.value);
+        Ldisplay.textContent = val.toFixed(3);
+        desenharInterativo(val);
+    });
+    desenharInterativo(parseFloat(slider.value));
 </script>
 </body>
 </html>
